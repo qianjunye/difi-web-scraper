@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: Web Scraper API
+  description: 一个接受参数请求指定网站并使用 Cheerio 输出指定内容的 API 服务
+  version: 1.0.0
+servers:
+  - url: 'http://127.0.0.1:3000'
+paths:
+  /scrape:
+    get:
+      summary: 请求指定网站并输出指定内容
+      description: 该接口根据传入的参数请求指定网站，并使用 Cheerio 输出指定格式的内容
+      operationId: scrapeWebsite
+      parameters:
+        - name: url
+          in: query
+          description: 要请求的网站 URL
+          required: true
+          schema:
+            type: string
+        - name: method
+          in: query
+          description: 请求方法，默认为 axios
+          required: false
+          schema:
+            type: string
+            enum:
+              - axios
+              - puppeteer
+        - name: outputFormat
+          in: query
+          description: 输出格式，可选值为 rawHtml、rawText，默认为 rawText
+          required: false
+          schema:
+            type: string
+            enum:
+              - rawHtml
+              - rawText
+        - name: className
+          in: query
+          description: 要提取内容的类名，若未提供则输出全文
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功获取内容
+        '400':
+          description: 缺少必要参数
+        '500':
+          description: 服务器错误
+components:
+  schemas: {}
